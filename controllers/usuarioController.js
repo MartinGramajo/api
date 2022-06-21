@@ -1,12 +1,12 @@
 const Usuario = require("../Models/Usuario");
 const bcryptjs = require('bcryptjs');
-const {validationResult} = require('express-validator');
+const { validationResult } = require('express-validator');
 
 exports.crearUsuario = async (req, res) => {
     // Revisamos los errores
-    const errores = validationResult(req); 
+    const errores = validationResult(req);
     if (!errores.isEmpty()) {
-        return res.status(400).json({msg: errores.array()})
+        return res.status(400).json({ msg: errores.array() })
     }
 
     const { email, password } = req.body;
@@ -19,7 +19,7 @@ exports.crearUsuario = async (req, res) => {
             return res.status(400).send("Email ya esta en uso")
         }
 
-        let usuario; 
+        let usuario;
 
         //nuevo usuario
         usuario = new Usuario(req.body); // vamos a crear un usuario de type USUARIO (es decir, por type USUARIO nos referimos al modelo USUARIO que hemos creado en Usuario.js) tomando los valors de req.body.
@@ -39,22 +39,43 @@ exports.crearUsuario = async (req, res) => {
     }
 };
 // Obtener lista de usuarios
-exports.obtenerUsuarios = (req, res) => {
-    console.log('Funcion para obtener usuarios');
-    res.status(200).send("Lista de usuarios")
+exports.obtenerUsuarios = async (req, res) => {
+    try {
+        const usuarios = await Usuario.find();
+        res.send(usuarios)
+    } catch (error) {
+        res.status(400).send("Hubo un error en la conexión a la base de datos")
+    }
 }
 // Obtener un usuario en singular
-exports.obtenerUsuario = (req, res) => {
-    console.log('usuario encontrado', req.params);
-    res.status(200).send("usuario encontrado")
+exports.obtenerUsuario = async (req, res) => {
+    try {
+        const usuarios = await Usuario.findById(req.params.id).select('name email');
+        res.send(usuarios)
+    } catch (error) {
+        res.status(400).send("Hubo un error en la conexión a la base de datos")
+    }
 }
-// Obtener un usuario y actualizar sus datos
-exports.modificarUsuario = (req, res) => {
-    console.log('usuario encontrado para modificar', req.params);
-    res.status(200).send("usuario Modificado")
+// Modificar el nombre del usuario
+exports.modificarUsuario = async (req, res) => {
+    try {
+        const usuario = await Usuario.findById(req.params.id);
+        if (!req.body.name) {
+            return res.status(404).send("Dato de nombre incompleto")
+        }
+        usuario.name = req.body.name;
+        await usuario.save();
+        res.send(usuario)
+    } catch (error) {
+        res.status(400).send("Hubo un error en la conexión a la base de datos")
+    }
 }
 // Borrar un usuario en singular
-exports.borrarUsuario = (req, res) => {
-    console.log('usuario borrado', req.params);
-    res.status(200).send("usuario encontrado para  borrado")
+exports.borrarUsuario = async (req, res) => {
+    try {
+        await Usuario.findById(req.params.id)
+        res.send("usuario eliminado")
+    } catch (error) {
+        res.status(400).send("Hubo un error en la conexión a la base de datos")
+    }
 }
