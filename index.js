@@ -3,6 +3,8 @@ require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const usuarioRoutes = require('./routes/usuariosRoute')
+const memeRoute = require('./routes/memesRoute')
+
 
 // crear el servidor 
 const app = express();
@@ -15,7 +17,8 @@ app.use(express.json({ extended: true }));
 app.use(express.urlencoded({ extended: true }));
 
 // RUTAS
-app.use('/api/usuarios', usuarioRoutes)
+app.use('/api/usuarios', usuarioRoutes);
+app.use('/api/memes', memeRoute);
 
 // puerto y arranque del servidor 
 app.listen(process.env.PORT || 4000, () => {
