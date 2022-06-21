@@ -12,7 +12,7 @@ mongoose.connect(process.env.MONGO_URL)
 
 // Habilitar express.json (también se puede usar body parser)
 app.use(express.json({ extended: true }));
-app.use(express.urlencoded());
+app.use(express.urlencoded({ extended: true }));
 
 // RUTAS
 app.use('/api/usuarios', usuarioRoutes)
