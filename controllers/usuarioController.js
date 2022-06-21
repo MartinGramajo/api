@@ -60,9 +60,11 @@ exports.obtenerUsuario = async (req, res) => {
 exports.modificarUsuario = async (req, res) => {
     try {
         const usuario = await Usuario.findById(req.params.id);
+        // condición: si en body no viene una propiedad "name" vamos a devolverlo como un error. 
         if (!req.body.name) {
             return res.status(404).send("Dato de nombre incompleto")
         }
+        // Porque para actualizar un usuario si o si queremos que venga un valor nuevo en name. 
         usuario.name = req.body.name;
         await usuario.save();
         res.send(usuario)
