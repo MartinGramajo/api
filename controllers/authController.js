@@ -112,6 +112,7 @@ exports.obtenerUsuarioAutenticado = async (req, res) => {
     }
 
     // Validar Token(por si el codigo puede fallar lo envolvemos en el bloque try/catch)
+    // el permiso seria validar al usuario para poder ver su información. 
     try {
         const cifrado = jwt.verify(token, process.env.SECRETA);
         const usuario = await Usuario.findById(cifrado.usuario.id); // para encontrar al usuario encontrado. 
