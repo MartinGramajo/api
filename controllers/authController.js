@@ -71,8 +71,10 @@ exports.login = async (req, res) => {
         if (!passCorrect) {
             return res.status(400).json({ msg: 'Password incorrecto' });
         }
+
         // Si todo es correcto Crear y firmar JWT
-        // 1-por buenas practice creamos un objeto llamado payload
+
+        // 1-por buenas practice creamos un objeto llamado payload(información importante)
         // 2- en ese objeto se guarda la propiedad usuario. 
         const payload = {
             usuario: {
