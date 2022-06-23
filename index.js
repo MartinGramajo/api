@@ -2,6 +2,7 @@
 require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
+const cors = require('cors')
 const usuarioRoutes = require('./routes/usuariosRoute')
 const memeRoute = require('./routes/memesRoute')
 const authRoutes = require('./routes/authRoute')
@@ -9,6 +10,10 @@ const authRoutes = require('./routes/authRoute')
 
 // crear el servidor 
 const app = express();
+
+// Deshabilitar cors/ permitir acceso cors
+app.use(cors())
+
 
 // Conectar a mongodb 
 mongoose.connect(process.env.MONGO_URL)
