@@ -55,7 +55,7 @@ exports.login = async (req, res) => {
         const { email, password } = req.body; // desestructuramos el body
 
         //Revisar usuario registrado:Buscamos el usuario usando el email que extraemos de body. 
-        let usuario = await Usuario.findOne({ email });
+        const usuario = await Usuario.findOne({ email });
         //validación por si el usuario no existe 
         if (!usuario) {
             return res.status(400).json({ msg: 'El Usuario no existe' });
@@ -91,7 +91,7 @@ exports.login = async (req, res) => {
             },
             (error, token) => {
                 if (error) throw error; // throw: es nuestro return del error. lo capturamos para evitar propagarse. 
-                res.json({ token }); // respuesta para el usuario. objeto con el token creado. 
+                res.json({ token, name: usuario.name, register: usuario.register }); // respuesta para el usuario. objeto con el token creado. 
             }
         );
 
@@ -115,7 +115,8 @@ exports.obtenerUsuarioAutenticado = async (req, res) => {
     // el permiso seria validar al usuario para poder ver su información. 
     try {
         const cifrado = jwt.verify(token, process.env.SECRETA);
-        const usuario = await Usuario.findById(cifrado.usuario.id); // para encontrar al usuario encontrado. 
+        // para encontrar al usuario encontrado.
+        const usuario = await Usuario.findById(cifrado.usuario.id).select('name role email'); 
         res.send(usuario);
     } catch (error) {
         res.status(401).json({ msg: 'Token no valido' })
