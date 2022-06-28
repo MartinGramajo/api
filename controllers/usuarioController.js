@@ -75,7 +75,7 @@ exports.modificarUsuario = async (req, res) => {
 // Borrar un usuario en singular
 exports.borrarUsuario = async (req, res) => {
     try {
-        await Usuario.findById(req.params.id)
+        await Usuario.findByIdAndDelete(req.params.id)
         res.send("usuario eliminado")
     } catch (error) {
         res.status(400).send("Hubo un error en la conexión a la base de datos")
