@@ -30,7 +30,7 @@ exports.crearMeme = async (req, res) => {
 
 exports.obtenerMemes = async (req, res) => {
     try {
-        const memes = await Meme.find().populate('creador');
+        const memes = await Meme.find().populate({ path: 'creador', select: 'name' });
         res.send(memes)
     } catch (error) {
         console.log(error);
