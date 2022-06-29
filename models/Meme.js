@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+
 const MemeSchema = mongoose.Schema({
     titulo: {
         type: String,
@@ -12,6 +13,11 @@ const MemeSchema = mongoose.Schema({
     }, 
     fecha: {
         type: Date,
+        required: true,
+    },
+    creador: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Usuario',
         required: true,
     }
 })

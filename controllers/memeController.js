@@ -1,9 +1,22 @@
+const jwt = require('jsonwebtoken');
 const Meme = require("../models/Meme");
 
 exports.crearMeme = async (req, res) => {
     try {
+        // LEER TOKEN que debería venir en el header de la request
+        // y lo guardamos en una variable. 
+        const token = req.header('x-auth-token');
+
+        // REVISAR TOKEN (validamos que exista un token, que el dato token no venga vacío)
+        if (!token) {
+            return res.status(401).json({ msg: 'No hay Token, permiso no valido' })
+        }
+
+        // VERIFICACIÓN DEL TOKEN: para extraer la id del usuario (cifrado.usuario.id)
+        const cifrado = jwt.verify(token, process.env.SECRETA);
+
         //Nuevo Meme 
-        const meme = new Meme(req.body);
+        const meme = new Meme({ ...req.body, creador: cifrado.usuario.id });
         meme.fecha = new Date();
         // Guardar Meme
         await meme.save();
@@ -17,10 +30,7 @@ exports.crearMeme = async (req, res) => {
 
 exports.obtenerMemes = async (req, res) => {
     try {
-        // variable donde se guarda el listado de memes.
-        //Al find() no le definimos ningún tipo de  filtro porque queremos todos los memes.
-        // y como es una promesa le agregamos el await. 
-        const memes = await Meme.find();
+        const memes = await Meme.find().populate('creador') // en esta linea estoy teniendo un error con .populate('creador') si lo quito me trae el get sino me tira error 
         res.send(memes)
     } catch (error) {
         console.log(error);
