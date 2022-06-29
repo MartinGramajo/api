@@ -30,7 +30,7 @@ exports.crearMeme = async (req, res) => {
 
 exports.obtenerMemes = async (req, res) => {
     try {
-        const memes = await Meme.find().populate('creador') // en esta linea estoy teniendo un error con .populate('creador') si lo quito me trae el get sino me tira error 
+        const memes = await Meme.find().populate('creador');
         res.send(memes)
     } catch (error) {
         console.log(error);

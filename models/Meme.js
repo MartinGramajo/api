@@ -17,7 +17,7 @@ const MemeSchema = mongoose.Schema({
     },
     creador: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Usuario',
+        ref: 'Usuarios',
         required: true,
     }
 })
