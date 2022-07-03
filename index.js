@@ -2,7 +2,8 @@
 require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
-const cors = require('cors')
+const cors = require('cors');
+const morgan = require('morgan');
 const usuarioRoutes = require('./routes/usuariosRoute')
 const memeRoute = require('./routes/memesRoute')
 const authRoutes = require('./routes/authRoute')
@@ -10,6 +11,7 @@ const authRoutes = require('./routes/authRoute')
 
 // crear el servidor 
 const app = express();
+app.use(morgan('dev'))
 
 // Deshabilitar cors/ permitir acceso cors
 app.use(cors())
