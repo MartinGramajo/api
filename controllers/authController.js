@@ -119,6 +119,7 @@ exports.obtenerUsuarioAutenticado = async (req, res) => {
         const usuario = await Usuario.findById(cifrado.usuario.id).select('name role email'); 
         res.send(usuario);
     } catch (error) {
+        console.error(error);
         res.status(401).json({ msg: 'Token no valido' })
     }
     res.send(token);
